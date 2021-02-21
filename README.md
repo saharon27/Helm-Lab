@@ -30,6 +30,8 @@ in the original repo: https://github.com/traefik/traefik-helm-chart
 ### Part II - K8s Dashboard for fun and monitoring
 
 In this part we want to make the k8s dashboard as dependency to our deployment chart.
+original chart can be found here: https://github.com/kubernetes/dashboard/tree/master/aio/deploy/helm-chart/kubernetes-dashboard.
+
 It is mostly the same as sub-chart, only difference is that this chart is a most have to our chart.
 Dependencies should be updated for first time use by running the command:
 ```
@@ -40,7 +42,9 @@ or by adding 'repository' URL to our chart/dependencies field.
 
 ### Part III - Adding the favorite butler chart
 
+
 In this part we will add the Jenkins server chart to our master chart.
+original chart can be found here: https://github.com/jenkinsci/helm-charts.
 In this part you can choose how to add it (dependency or not).
 
 
