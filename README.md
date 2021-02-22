@@ -22,15 +22,9 @@ After installing all the needed stuff, let's start creating our chart of charts.
 
 ### Part I - Taking Care of Traefik Chart
 
-In this part we make the Traefik chart as sub-chart.
+In this part we make the Traefik as dependency to our deployment chart.
 Under the lab-charts folder you will find a forked Traefik chart. You can also find the chart
 in the original repo: https://github.com/traefik/traefik-helm-chart
-
-
-### Part II - K8s Dashboard for fun and monitoring
-
-In this part we want to make the k8s dashboard as dependency to our deployment chart.
-original chart can be found here: https://github.com/kubernetes/dashboard/tree/master/aio/deploy/helm-chart/kubernetes-dashboard.
 
 It is mostly the same as sub-chart, only difference is that this chart is a most have to our chart.
 Dependencies should be updated for first time use by running the command:
@@ -38,6 +32,16 @@ Dependencies should be updated for first time use by running the command:
 helm dependency update 
 ```
 or by adding 'repository' URL to our chart/dependencies field.
+
+
+### Part II - K8s Dashboard for fun and monitoring
+
+In this part we want to make the k8s dashboard chart as sub-chart.
+original chart can be found here: https://github.com/kubernetes/dashboard/tree/master/aio/deploy/helm-chart/kubernetes-dashboard.
+
+It is mostly the same as dependecy, only difference is that the deployment will not fail if
+the chart is missing.
+
 
 
 ### Part III - Adding the favorite butler chart

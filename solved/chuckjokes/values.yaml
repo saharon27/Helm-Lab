@@ -1,0 +1,122 @@
+# Default values for chuckjokes.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  image: chuck-yanko
+  repository: nexus-docker.minikube
+  tag: 
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: false
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations:
+    ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chuck-norris.minikube
+      paths:
+        - /
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+traefik:
+  dashboard:
+    enabled: true
+    domain: traefik.localhost
+    auth:
+      basic:
+        admin: $2y$05$kpCJY2gJWlgG5CUs5tdPx.2xGJ4xyqhWtjiiM/NKfHmj3pfUPsap2
+  ssl:
+    enabled: true
+    enforced: true
+    permanentRedirect: true
+    generateTLS: true
+    defaultCN: "*.localhost"
+
+
+kubernetes-dashboard:
+  enableInsecureLogin: true
+  service:
+    externalPort: 9090
+  ingress:
+    enabled: true
+    hosts:
+      - dashboard.localhost
+    paths:
+      - /
+    annotations:
+      kubernetes.io/ingress.class: traefik
+
+jenkins:
+  master:
+    useSecurity: true
+    adminUser: admin
+    adminPassword: admin
+    numExecutors: 1
+    installPlugins:
+      - kubernetes:1.21.1
+      - workflow-job:2.36
+      - workflow-aggregator:2.6
+      - credentials-binding:1.20
+      - git:3.12.1
+      - command-launcher:1.3
+      - github-branch-source:2.5.8
+      - docker-workflow:1.21
+      - pipeline-utility-steps:2.3.1
+    overwritePlugins: true
+    ingress:
+      enabled: true
+      hostName: jenkins.localhost
+      annotations:
+        kubernetes.io/ingress.class: traefik
