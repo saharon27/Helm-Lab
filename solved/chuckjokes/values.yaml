@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  image: chuck-yanko
-  repository: nexus-docker.minikube
+  image: chuck:1.0.1
+  repository: docker-virtual.artifactory.igentify.net
   tag: 
   pullPolicy: IfNotPresent
 
@@ -44,7 +44,7 @@ ingress:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     kubernetes.io/tls-acme: "true"
   hosts:
-    - host: chuck-norris.minikube
+    - host: chuck-norris.localhost
       paths:
         - /
   tls: []
