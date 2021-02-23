@@ -144,12 +144,66 @@ and replace it with ```global.ingress.annotations```. but remember that we don't
 
 ### Part III - Adding the favorite butler chart
 
-
 In this part we will add the Jenkins server chart to our master chart.
 original chart can be found here: https://github.com/jenkinsci/helm-charts.
-In this part you can choose how to add it (dependency or not).
+In this part you can choose how to add it (dependency or not). 
 
+1. The only step I will tell you here is that you will need to have those values:
+    ```
+      controller:
+        adminSecret: true
+        adminUser: admin
+        adminPassword: admin
+        numExecutors: 1
+        installPlugins:
+          - kubernetes:1.29.0
+          - workflow-job:2.40
+          - workflow-aggregator:2.6
+          - credentials-binding:1.24
+          - git:4.6.0
+          - command-launcher:1.5
+          - github-branch-source:2.9.6
+          - docker-workflow:1.25
+          - pipeline-utility-steps:2.6.1
+          - configuration-as-code:1.47
+        overwritePlugins: true
+        ingress:
+          enabled: true
+          hostName: jenkins.localhost
+          annotations:
+            kubernetes.io/ingress.class: traefik
+    ```
+
+* Pay attention to how you add it and where. You are on your own (but from now you should be fine).
 
 ### Part IV - Running our Helm chart and praying that it works...
 
 In this part we will finally run helm install on our cluster and see the fruits of our labor.
+
+1. let's go to the chuckjokes folder and run the following command:
+    ```
+    helm install --dry-run --debug chuck .
+    ```
+   This should do as-if install and will alert us on any errors that might be.
+2. if everything is ok, then let's run the same command without the --dry-run flag. this will actually install our chart.
+3. If all goes well, we can run the following command to see what is the state of the pods that we just deployed:
+    ```
+    kubectl get pods
+    ```
+4. Let's go and check our services. Usually the first ones that will be ready are the traefik and dashboard. Let's go and see them:
+    * traefik - http://traefik.localhost
+    * k8s dashboard - http://dashboard.localhost
+        * for login to the k8s dashboard you will need it's token. this could be retrieved by:
+        ```
+        kubectl get secrets
+        kubectl describe <the secret that ends with dashboard-token>
+        ```
+        copy the token and paste it in the login screen.
+    * In traefik you can also see if there is a problem with one of the services (it will be red).  
+    * Jenkins can take a few minutes as it installs plugins and stuff. when up it will be available in http://jenkins.localhost
+        * login with the user and password that is set in it's values.
+    * Our Chuck Norris web app should be available at: http://chuck-jokes.localhost/chuck-yanko
+        * Try to refresh to get new jokes :)
+    
+Hope you enjoyed this lab.
+Any comments are welcome... unless they are bad :)
