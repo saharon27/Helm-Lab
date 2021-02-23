@@ -25,7 +25,6 @@ metadata:
   {{- range $key, $value := .Values.ingress.labels }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
-
   annotations:
 {{- if not .Values.protocolHttp }}
     # Add https backend protocol support for ingress-nginx
@@ -33,8 +32,14 @@ metadata:
     # Add https backend protocol support for GKE
     service.alpha.kubernetes.io/app-protocols: '{"https":"HTTPS"}'
 {{- end }}
+{{- if .Values.global }}
+{{- with .Values.global.ingress.annotations }}
+{{ toYaml . | indent 4 }}
+{{- end }}
+{{- else }}
 {{- with .Values.ingress.annotations }}
 {{ toYaml . | indent 4 }}
+{{- end }}
 {{- end }}
 spec:
   rules:

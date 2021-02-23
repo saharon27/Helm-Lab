@@ -41,6 +41,8 @@ original chart can be found here: https://github.com/kubernetes/dashboard/tree/m
 
 It is mostly the same as dependecy, only difference is that the deployment will not fail if
 the chart is missing.
+In this part we will also make a simple use of global values an implement a simple solution
+for the problem of using global and harming the stand-alone chart.
 
 
 
@@ -50,7 +52,6 @@ the chart is missing.
 In this part we will add the Jenkins server chart to our master chart.
 original chart can be found here: https://github.com/jenkinsci/helm-charts.
 In this part you can choose how to add it (dependency or not).
-But now will make use og global values and how to make the chart still stand-alone.
 
 
 ### Part IV - Running our Helm chart and praying that it works...

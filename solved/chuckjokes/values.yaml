@@ -77,6 +77,11 @@ affinity: {}
 
 # From here those values are for the sub-charts:
 
+global:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: traefik
+
 traefik:
   dashboard:
     enabled: true
@@ -103,8 +108,8 @@ kubernetes-dashboard:
       - dashboard.localhost
     paths:
       - /
-    annotations:
-      kubernetes.io/ingress.class: traefik
+#    annotations:
+#      kubernetes.io/ingress.class: traefik
 
 jenkins:
   controller:
