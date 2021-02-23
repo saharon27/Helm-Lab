@@ -50,6 +50,7 @@ the chart is missing.
 In this part we will add the Jenkins server chart to our master chart.
 original chart can be found here: https://github.com/jenkinsci/helm-charts.
 In this part you can choose how to add it (dependency or not).
+But now will make use og global values and how to make the chart still stand-alone.
 
 
 ### Part IV - Running our Helm chart and praying that it works...
