@@ -5,14 +5,19 @@
 replicaCount: 1
 
 image:
-  image: chuck-yanko
-  repository: nexus-docker.minikube
+  image: "chuck"
+  repository: "docker-virtual.artifactory.igentify.net"
   tag: 
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+
+
+name: "chuck-jokes"
+domain: "localhost"
+
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -33,24 +38,21 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
-  port: 80
+# type: ClusterIP
+  port: 8080
 
 ingress:
   enabled: true
   annotations:
-    ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/proxy-body-size: "0"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: traefik
   hosts:
-    - host: chuck-norris.minikube
+    - host: chuck-jokes.localhost
       paths:
-        - /
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+        - /chuck-yanko
+#  tls: []
+#  #  - secretName: chart-example-tls
+#  #    hosts:
+#  #      - chart-example.local
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -69,3 +71,6 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# From here those values are for the sub-charts:
+
