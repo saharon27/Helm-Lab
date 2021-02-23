@@ -66,6 +66,8 @@ for our example we placed it under "charts" and we are going to create a referen
         defaultCN: "*.localhost"
     ```
    those lines will make traefik expose it's dashboard at the domain we want.
+   * Please note that the values we want to override will always be under a block with the exact name of the sub-chart.
+   
 5. that's it. now traefik is a dependency chart of chuckjokes. now if we will install our umbrella it will deploy both our app and traefik.
 but we are not done yet...
 
@@ -81,7 +83,64 @@ for the problem of using global and harming the stand-alone chart.
 
 Pay attention - kubernetes-dashboard has it's own dependencies !!!
 
+1. Now let's get our k8s dashboard inside our beloved "charts" folder.
+1. That's it... from this moment this chart is considered sub-chart and will be part of the installation of our chuckjokes umbrella chart.
+but we are not done with it yet. Let's first take care of the dashboard chart dependencies. go to the it's folder and run:
+    ```
+    helm dep update
+    ```
+    this will retrieve all the deps that are needed for our k8s dashboard chart as tgz file.
+1. now let's add some values we want to override to chuckjokes/values.yaml file
+    ```
+    kubernetes-dashboard:
+      enableInsecureLogin: true
+      service:
+        externalPort: 9090
+      ingress:
+        enabled: true
+        hosts:
+          - dashboard.localhost
+        paths:
+          - /
+    ```
+1. Now we want also to add a global value to this file. let's do it:
+    ```
+    global:
+      ingress:
+        annotations:
+          kubernetes.io/ingress.class: traefik
+    ```
+    * Now we want to use the global in our k8s dashboard chart. The use of global is done by simply using
+    ``` 
+    {{ .Values.global.<name of the value> }}
+    ``` 
+    instead of using 
+    ```
+    {{ .Values.global.<name of the value> }}
+    ```
+    but there is more to it as if we just implement it like this, our chart will no longer be a stand-alone, as it
+    will fail to run alone because the templating engine will fail on none existing global value when trying to install 
+    only the k8s dashboard chart. No worries there are solutions for that... now pause a bit and try think for yourself
+    how we can resolve it...
 
+1. Now, we have added a ```ingress.annotations``` value to our global. What we need to do is to find all the uses of ```ingress.annotations``` value in k8s dashboard chart.
+and replace it with ```global.ingress.annotations```. but remember that we don't want to harm the stand-alone ability.
+
+    * one possible solution is to use the "if condition", so in our chart the use of the above value is under templates/ingress.yaml.
+    let's just replace the lines that use it, so it will look like this:
+    ```
+    {{- if .Values.global }}
+    {{- with .Values.global.ingress.annotations }}
+    {{ toYaml . | indent 4 }}
+    {{- end }}
+    {{- else }}
+    {{- with .Values.ingress.annotations }}
+    {{ toYaml . | indent 4 }}
+    {{- end }}
+    {{- end }}
+    ```
+    you can look at the solved/chuckjokes chart to see how the file should look like.
+1. That's it we have now added another sub-chart and used global values. Let's move to the next part...
 
 ### Part III - Adding the favorite butler chart
 
