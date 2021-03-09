@@ -24,6 +24,7 @@ In the solved folder you can find the end result we want to achieve.
 ## Let's start
 
 After getting all the needed stuff, let's start creating our chart of charts.
+Please note, during the lab, chuckjokes chart will be our "base ground".
 
 ### Part I - Taking Care of Traefik Chart
 
@@ -31,7 +32,7 @@ In this part we make the Traefik as dependency to our deployment chart.
 Under the lab-charts folder you will find a forked Traefik chart. You can also find the chart
 in the original repo: https://github.com/traefik/traefik-helm-chart
 
-It is mostly the same as sub-chart, only difference is that this chart is a most have to our chart.
+Dependency chart is mostly the same as sub-chart, only difference is that this chart is a most have to our chart.
 Dependencies should be updated for first time use by running the command:
 ```
 helm dependency update 
