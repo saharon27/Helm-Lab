@@ -5,9 +5,9 @@
 replicaCount: 1
 
 image:
-  image: "chuck"
-  repository: "docker-virtual.artifactory.igentify.net"
-  tag: 
+  image: "chuck-jokes"
+  repository: "282101131743.dkr.ecr.eu-central-1.amazonaws.com"
+  tag: "latest"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
