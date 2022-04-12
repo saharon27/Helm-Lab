@@ -20,6 +20,7 @@ In the solved folder you can find the end result we want to achieve.
 1. kubectl
 1. helm3
 1. This repo cloned to your machine :)
+1. chuck-norris dockerfile can be found here: https://github.com/saharon27/chuck-norris-jokes-docker
 
 ## Let's start
 
